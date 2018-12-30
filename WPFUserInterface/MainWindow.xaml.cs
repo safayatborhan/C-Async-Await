@@ -33,6 +33,16 @@ namespace WPFUserInterface
         {
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
+            //RunDownloadAsync();
+
+            // we can also use this RunDownloadAsync() method. it will make the whole process 
+            // done step by step. so, at the output window, we will see the timer at the very first
+            // time, but it supposed to show at the end of all the processes are finished. 
+            // in that case, we are using RunDownloadParallelAsync() - this method. as we are writting 
+            // await at the begining, it waits untill all the processes are finished and then it shows
+            // time in the timer. below method is better, because, the first one, every tast was processed
+            // step by step. so, it's almost same as sync method. and you know, we don't want that, right?
+
             await RunDownloadParallelAsync();
 
             watch.Stop();
@@ -76,6 +86,12 @@ namespace WPFUserInterface
             foreach (string site in websites)
             {
                 tasks.Add(DownloadWebsiteAsync(site));
+
+                // we have already a method named DownloadWebsite. here, we are using another method that 
+                // has almost same functionality but invokes asynchrously. that's why we have created another 
+                // method name DownloadWebsiteAsync. but we can still use method 'DownloadWebsite' just by 
+                // using Task.Run(). just like here in below....
+                //tasks.Add(Task.Run(() => DownloadWebsite(site)));
             }
 
             var results = await Task.WhenAll(tasks);
